@@ -21,10 +21,15 @@ const ButtonContainer = styled.div`
 `
 const FormButton = styled(Button)`
   width: 120px;
+
+  :disabled {
+      filter:brightness(0.8);
+      cursor:not-allowed;
+  }
 `
 
-export const Form = ({ onAddLang }) => {
-  const [text, setText] = useState('');
+export const Form = ({ onAddLang, onEditLang, editValue }) => {
+  const [text, setText] = useState(editValue ? editValue.value : '');
   const [showModal, setShowModal] = useState(false);
 
   const submitForm = (e) => {
@@ -33,7 +38,7 @@ export const Form = ({ onAddLang }) => {
   }
 
   return (
-    <TabBodyContainer title="新しい言語の追加">
+    <TabBodyContainer title={editValue ? "言語の編集" : "新しい言語の追加"}>
       <form onSubmit={submitForm}>
         <div>
           <Label>言語</Label>
@@ -41,13 +46,13 @@ export const Form = ({ onAddLang }) => {
           <Hint />
         </div>
         <ButtonContainer>
-          <FormButton>追加</FormButton>
+          <FormButton disabled={text ? false : true}>{editValue ? "保存" : "追加"}</FormButton>
         </ButtonContainer>
       </form>
       {
         showModal &&
           <FormModal
-            confirm={() => onAddLang(text)}
+            confirm={() => editValue ? onEditLang(text, editValue.index) : onAddLang(text)}
             cancel={() => setShowModal(false)}
           />
       }

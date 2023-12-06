@@ -7,16 +7,19 @@ const ListItem = styled.div`
   &:nth-child(n+2) {
     border-top: 1px solid #D9DBDE;
   }
+
+  cursor: pointer;
 `
 
-export const List = ({ langs }) => {
+export const List = ({ langs, title, onEditItem }) => {
+  const onListItemClick = (e, i) => {
+    onEditItem(i, e.target.innerText);
+  };
   return (
-    <TabBodyContainer title="取り扱い言語リスト">
+    <TabBodyContainer title={title}>
       <div>
         {
-          langs.map((lang, index) => {
-            return <ListItem key={index}>{ lang }</ListItem>
-          })
+          langs.map((lang, index) => <ListItem key={index} onClick={(e) => onListItemClick(e, index)}>{ lang }</ListItem>)
         }
       </div>
     </TabBodyContainer>
